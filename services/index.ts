@@ -6,4 +6,4 @@ export {
   CronService,
   FeedsService,
   RedisService,
-}
+};
