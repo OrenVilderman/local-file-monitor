@@ -1,6 +1,19 @@
 # local-file-monitor
 This is a sample of local file monitor with a key-value store in redis and 100% code coverage with unit tests
 
+## Production Usage/Implementation
+`cron.service.ts` - is a service that contain logs that report the file feeds status, this is recommended to add a Web service and use it to send the information from file storages that get feeds to a server that can analize the data.
+
+```typescript
+console.info('back to normal');
+//TODO: Recommended location to add call to a web service
+```
+
+```typescript
+console.warn(`Warning: No new feed file received in the last ${intervalTime} or more minutes`);
+//TODO: Recommended location to add call to a web service
+```
+
 ## Installation
 Install by running 
 ``` 
@@ -18,6 +31,7 @@ Start the tests by running:
 ``` 
 npm test
 ```
+
 ## Unit tests cover status:
 <img alt="Image_Of_Unit_Tests_Cover_Report" src="images\Unit_Tests_Cover.png" style="min-width:800px; width:1200px;"/>
 
