@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 
 export default class FeedsService {
   /**
@@ -8,24 +8,24 @@ export default class FeedsService {
      * @returns
      */
   getFilesFeedDateAsync(dir: string, idArr: string[]) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       fs.readdir(dir, async (error, filesName) => {
         if (error) {
-          throw new Error(`Readdir Error: ${error.message}`);
+          return reject(new Error(`Readdir Error: ${error.message}`));
         }
         if (!filesName || filesName.length == 0) {
-          throw new Error(`filesNams Error, No Files Found: ${JSON.stringify(filesName)}`);
+          return reject(new Error(`filesNams Error, No Files Found: ${JSON.stringify(filesName)}`));
         }
         const filteredNames = filesName.filter((fileName) => idArr.includes(fileName));
-        const lastModifiedDatas = await Promise.all(filteredNames.map((fileName) => new Promise((resolve) => {
+        const lastModifiedDatas = await Promise.all(filteredNames.map((fileName) => new Promise((resolve, reject) => {
           fs.stat(`${dir}/${fileName}`, (error, stats) => {
             if (error) {
-              throw new Error(`Stat Error: ${error.message}`);
+              return reject(new Error(`Stat Error: ${error.message}`));
             }
-            resolve({ FileName: fileName, LastUpdate: new Date(stats.mtimeMs) });
+            return resolve({ FileName: fileName, LastUpdate: new Date(stats.mtimeMs) });
           });
-        })));
-        resolve(lastModifiedDatas);
+        }).catch((error) => reject(new Error(error)))));
+        return resolve(lastModifiedDatas);
       });
     });
   }
