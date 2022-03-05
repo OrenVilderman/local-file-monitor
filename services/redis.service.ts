@@ -1,20 +1,24 @@
 import { createClient } from 'redis';
 import 'dotenv/config';
 
-// set the path to the file feeds folder
-const REDIS_URL: string = process.env.REDIS || 'redis://localhost:6379';
-
 export default class RedisService {
-  initiate = (async () => {
-    const client = createClient({ url: REDIS_URL });
+  // set the path to the file feeds folder
+  REDIS_URL: string = process.env.REDIS_URL || 'redis://localhost:6379';
 
-    client.on('error', (err) => console.log('Redis Client Error', err));
+  initiate = async () => {
+    const client = createClient({ url: this.REDIS_URL });
+
+    client.on('error', (error) => {
+      console.log('Redis Client Error', error);
+      throw new Error(`Redis Client Error: ${error}`);
+    });
 
     await client.connect();
-
     return {
       set: (key: string, value: string) => client.set(key, value),
       get: (key: string) => client.get(key),
+      del: (key: string) => client.del(key),
+      disconnect: () => client.disconnect(),
     };
-  });
+  };
 }
