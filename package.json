@@ -1,7 +1,7 @@
 {
   "name": "local-file-monitor",
   "version": "0.2.0",
-  "description": "This is a sample of local file monitor with a key-value store",
+  "description": "This is a sample of local file monitor with a key-value store in redis and 100% code coverage with unit tests",
   "main": "app.ts",
   "scripts": {
     "test": "jest",
@@ -16,7 +16,10 @@
   "keywords": [
     "cron",
     "redis",
-    "typescript"
+    "typescript",
+    "mock",
+    "sinon",
+    "unittsts"
   ],
   "author": "Oren Vilderman",
   "license": "ISC",
