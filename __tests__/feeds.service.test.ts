@@ -54,6 +54,7 @@ describe('Feeds Service Tests Suite', () => {
     it('FS Stat Error (Mock)', async () => {
       sinon
         .stub(fs, 'stat').yields({ message: 'Test_Stat_Error' }, null);
+
       const feedsService = new FeedsService();
 
       let errorMessage;
