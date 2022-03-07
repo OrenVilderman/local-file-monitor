@@ -1,6 +1,6 @@
 {
   "name": "local-file-monitor",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "This is a sample of local file monitor with a key-value store in redis and 100% code coverage with unit tests",
   "main": "app.ts",
   "scripts": {
