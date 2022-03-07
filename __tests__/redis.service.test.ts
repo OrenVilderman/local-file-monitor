@@ -2,6 +2,8 @@ import { expect } from 'chai';
 import {
   describe, it, beforeEach, afterEach,
 } from '@jest/globals';
+import * as sinon from 'sinon';
+import * as redis from 'redis';
 import { RedisService } from '../services/index';
 import 'dotenv/config';
 
@@ -10,11 +12,24 @@ describe('Redis Service Tests Suite', () => {
     let redisClient;
 
     beforeEach(async () => {
+      const fakeRedisClient = {
+        on: () => undefined,
+        connect: () => undefined,
+        get: async () => 'Pass',
+        set: async () => 'OK',
+        del: async () => 1,
+        disconnect: async () => undefined,
+      };
+
+      sinon
+        .stub(redis, 'createClient').callsFake(() => fakeRedisClient as any);
+
       const redisService = new RedisService();
       redisClient = await redisService.initiate();
     });
 
     afterEach(async () => {
+      sinon.restore();
       await redisClient.disconnect();
     });
 
@@ -25,11 +40,17 @@ describe('Redis Service Tests Suite', () => {
       expect(getResponse).to.include('Pass');
       const updateResponse = await redisClient.set('Test', 'Updated');
       expect(updateResponse).to.include('OK');
+      sinon
+        .stub(redisClient, 'get').returns('Updated');
       const getResponseAfterUpdate = await redisClient.get('Test');
+      sinon.restore();
       expect(getResponseAfterUpdate).to.include('Updated');
       const deleteResponse = await redisClient.del('Test');
       expect(deleteResponse).to.equal(1);
+      sinon
+        .stub(redisClient, 'get').returns(null);
       const getResponseAfterDelete = await redisClient.get('Test');
+      sinon.restore();
       expect(getResponseAfterDelete).to.be.null;
     });
   });

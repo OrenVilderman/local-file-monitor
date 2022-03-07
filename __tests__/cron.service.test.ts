@@ -1,23 +1,52 @@
 import { expect } from 'chai';
 import {
-  describe, it, jest,
+  describe, it, jest, beforeEach, afterEach,
 } from '@jest/globals';
 import * as fs from 'fs';
-import { CronService } from '../services/index';
-
-// set the path to the file feeds folder
-const FEED_DIR: string = process.env.RECEIVED_DIR || 'c:/tmp/feeds';
-// set the id of the customers include the suffix in a comma separated string without spaces
-const CUSTOMERS_ID_ARR_AS_STR: string = process.env.CUSTOMERS_ID_ARR_AS_STR || '1424.batch,4323.batch,1194.batch';
+import * as sinon from 'sinon';
+import * as redis from 'redis';
+import { CronService, RedisService } from '../services/index';
 
 describe('Cron Service Tests Suite', () => {
   describe('Scenarios', () => {
-    jest.setTimeout(1000 * 60 * 2);
+    jest.setTimeout(1000 * 40);
+
+    let redisClient;
+
+    beforeEach(async () => {
+      const fakeRedisClient = {
+        on: () => undefined,
+        connect: () => undefined,
+        get: async () => 1646692905925,
+        set: async () => 'OK',
+        disconnect: async () => undefined,
+      };
+
+      sinon
+        .stub(redis, 'createClient').callsFake(() => fakeRedisClient as any);
+
+      sinon
+        .stub(fs, 'readdir').yields(undefined, ['1000.bulk', '1001.bulk']);
+
+      sinon
+        .stub(fs, 'stat').yields(undefined, {
+          mtimeMs: 1646692905925,
+        });
+
+      const redisService = new RedisService();
+      redisClient = await redisService.initiate();
+    });
+
+    afterEach(async () => {
+      sinon.restore();
+      await redisClient.disconnect();
+    });
+
     it('Start Cron Job', async () => {
       const cronService = new CronService();
-      const job = cronService.initiateFeedLogsCronJob(1, 6);
+      const job = cronService.initiateFeedLogsCronJob(1, 2);
       job.then((job) => job.start());
-      await new Promise((resolve) => setTimeout(resolve, 10000));
+      await new Promise((resolve) => setTimeout(resolve, 4000));
       expect(await job).to.have.property('running').true;
       job.then((job) => job.stop());
       expect(await job).to.have.property('running').false;
@@ -26,12 +55,17 @@ describe('Cron Service Tests Suite', () => {
 
     it('New Feed', async () => {
       const cronService = new CronService();
-      const job = cronService.initiateFeedLogsCronJob(1, 6);
+      const job = cronService.initiateFeedLogsCronJob(1, 2);
       job.then((job) => job.start());
-      await new Promise((resolve) => setTimeout(resolve, 10000));
+      await new Promise((resolve) => setTimeout(resolve, 4000));
+      // @ts-ignore
+      fs.stat.restore();
+      sinon
+        .stub(fs, 'stat').yields(undefined, {
+          mtimeMs: new Date().getTime(),
+        });
 
-      fs.writeFileSync(`${FEED_DIR}/${CUSTOMERS_ID_ARR_AS_STR.split(',')[0]}`, 'New_Feed_Test');
-      await new Promise((resolve) => setTimeout(resolve, 10000));
+      await new Promise((resolve) => setTimeout(resolve, 4000));
 
       expect(await job).to.have.property('running').true;
       job.then((job) => job.stop());
@@ -43,7 +77,7 @@ describe('Cron Service Tests Suite', () => {
       const cronService = new CronService();
       const job = cronService.initiateFeedLogsCronJob(1);
       job.then((job) => job.start());
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, 4000));
       expect(await job).to.have.property('running').true;
       job.then((job) => job.stop());
       expect(await job).to.have.property('running').false;
