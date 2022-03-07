@@ -1,6 +1,11 @@
 # local-file-monitor
 This is a sample of local file monitor with a key-value store in redis and 100% code coverage with unit tests
 
+## GitHub Repository
+[![`GitHub`](https://img.shields.io/github/package-json/v/OrenVilderman/local-file-monitor?logo=github)](https://github.com/OrenVilderman/local-file-monitor.git)
+[![Tests](https://github.com/OrenVilderman/local-file-monitor/actions/workflows/test.yml/badge.svg)](https://github.com/OrenVilderman/local-file-monitor/actions/workflows/test.yml)
+
+
 ## Production Usage/Implementation
 `cron.service.ts` - is a service that contains logs that report the file feeds status, this is recommended to add a Web service and use it to send the information from file storages that get feeds to a server that can analyze the data.
 
