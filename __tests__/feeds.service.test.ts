@@ -62,6 +62,9 @@ describe('Feeds Service Tests Suite', () => {
 
     it('FS Stat Error (Mock)', async () => {
       sinon
+        .stub(fs, 'readdir').yields(undefined, ['1000.bulk', '1001.bulk']);
+
+      sinon
         .stub(fs, 'stat').yields({ message: 'Test_Stat_Error' }, undefined);
 
       const feedsService = new FeedsService();
