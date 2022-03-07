@@ -33,15 +33,14 @@ Start the tests by running:
 ``` 
 npm test
 ```
-*The tests are ment to be used with a redis-server that is running on the file feed server,  
-To use this program with redis-server that is not on the default port - Please edit the `REDIS_URL` in the `.env` file
+*The unit tests are ment to be used without a redis-server as an example of more complex mock.  
 
 ## Unit tests cover status:
 <img alt="Image_Of_Unit_Tests_Cover_Report" src="images\Unit_Tests_Cover.png" style="min-width:800px; width:1200px;"/>
 
 ## Unit tests mock example
 `feeds.service.test.ts` - The `fs.stat` function return a promise that can be rejected,
-The challenge is how to reject this within a Unit Test - to met this challenge in a simple way and achieve 100% code cover,  
+The challenge is how to reject this within a Unit Test - to meet this challenge in a simple way and achieve 100% code coverage,  
 I used sinon with stub to mock the response of the `fs.stat` function.
 ```typescript
 it('FS Stat Error (Mock)', async () => {

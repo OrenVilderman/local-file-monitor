@@ -13,7 +13,7 @@ export default class FeedsService {
         if (error) {
           return reject(new Error(`Readdir Error: ${error.message}`));
         }
-        if (!filesName || filesName.length == 0) {
+        if (!filesName || filesName.length === 0) {
           return reject(new Error(`filesNams Error, No Files Found: ${JSON.stringify(filesName)}`));
         }
         const filteredNames = filesName.filter((fileName) => idArr.includes(fileName));

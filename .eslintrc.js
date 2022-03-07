@@ -19,7 +19,6 @@ module.exports = {
     'no-console': 'off',
     'class-methods-use-this': 'off',
     'max-len': 'off',
-    'eqeqeq': 'off',
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'no-shadow': 'off',
