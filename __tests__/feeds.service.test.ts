@@ -48,15 +48,15 @@ describe('Feeds Service Tests Suite', () => {
 
     it('No Files Found Error', async () => {
       const feedsService = new FeedsService();
-      fs.mkdirSync(`${FEED_DIR}/test`);
-
+      sinon
+        .stub(fs, 'readdir').yields(undefined, []);
       let errorMessage;
       try {
         await feedsService.getFilesFeedDateAsync(`${FEED_DIR}/test`, CUSTOMERS_ID_ARR_AS_STR.split(','));
       } catch (error) {
-        fs.rmSync(`${FEED_DIR}/test`, { recursive: true, force: true });
         errorMessage = error.message;
       }
+      sinon.restore();
       expect(errorMessage).to.include('filesNams Error, No Files Found: []');
     });
 
