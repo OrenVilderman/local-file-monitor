@@ -43,7 +43,7 @@ describe('Feeds Service Tests Suite', () => {
       } catch (error) {
         errorMessage = error.message;
       }
-      expect(errorMessage).to.include('Readdir Error: ENOENT: no such file or directory, scandir \'c:\\test\\empty\'');
+      expect(errorMessage).to.include('Readdir Error: ENOENT: no such file or directory, scandir');
     });
 
     it('No Files Found Error', async () => {
