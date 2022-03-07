@@ -30,7 +30,7 @@ Start the program by running:
 ``` 
 npm start
 ```
-*The program is ment to be used with a redis-server that is running on the file feed server,  
+*The program is meant to be used with a redis-server that is running on the file feed server,  
 To use this program with redis-server that is not on the default port - Please edit the `REDIS_URL` in the `.env` file
 
 ## Start the jest coverage tests that will print the full Jest HTML coverage report
@@ -38,7 +38,7 @@ Start the tests by running:
 ``` 
 npm test
 ```
-*The unit tests are ment to be used without a redis-server as an example of more complex mock.  
+*The unit tests are meant to be used without a redis-server as an example of a more complex mock.  
 
 ## Unit tests cover status:
 <img alt="Image_Of_Unit_Tests_Cover_Report" src="images\Unit_Tests_Cover.png" style="min-width:800px; width:1200px;"/>
