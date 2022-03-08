@@ -105,3 +105,6 @@ dist
 
 # Jest
 jest-html-reporters
+
+# environment
+.env
